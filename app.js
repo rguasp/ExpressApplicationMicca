@@ -15,9 +15,13 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/TestDB', {useNewUrlParser: true});
 const Schema = mongoose.Schema;
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
+
+
 const contactformsSchema = new Schema ({
-firstName: String,
-lastName: String,
+firstname: String,
+lastname: String,
 email: String,
 subject: String,
 message: String,
@@ -25,27 +29,28 @@ message: String,
 
 const Contactform = mongoose.model('Contactform', contactformsSchema)
 
-app.get('/contactForm', function (req, res) {
+app.get('/contactForm/9320', function (req, res) {
   // Movie.find()
   Contactform.find()
     .then(contactForm => { 
       // console.log(contactForm[0]);
       // console.log(movies[0].title);
       let data = {};
-      data.theList = contactForm[0];
+      data.theList = contactForm;
+      console.log(data.theList);
       res.render('contactFormData', data)
   })
   .catch(theError => {console.log(theError)})
 })
 
 // Get request after movie creation
-app.get('/contactForm/new', function (req, res) {
+app.get('/contactForm', function (req, res) {
   res.render('contactForm')
 })
 
 // // Submitted contact form
-app.post('/contactForm/new', function (req, res) {
-  // console.log("req body", req.body);
+app.post('/contactForm', function (req, res) {
+  //  console.log("req body", req.body);
 
    const theActualFirstName = req.body.firstname;
    const theActualLastName = req.body.lastname
@@ -56,8 +61,8 @@ app.post('/contactForm/new', function (req, res) {
 
 
   const newContactform = new Contactform({
-    firstName :theActualFirstName,
-    lastName :theActualLastName,
+    firstname :theActualFirstName,
+    lastname :theActualLastName,
     email : theActualEmail,
     subject: theActualSubject,
     message: theActualMessage,
@@ -71,7 +76,7 @@ app.post('/contactForm/new', function (req, res) {
     console.log(theError)
   })
 
-  res.redirect('/contactForm')
+  res.redirect('/')
 })
 
 
@@ -79,8 +84,7 @@ app.post('/contactForm/new', function (req, res) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+
 
 
 app.use(logger('dev'));

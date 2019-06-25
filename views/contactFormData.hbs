@@ -1,9 +1,11 @@
 {{#each theList}}
 <div>
 
-  <P>{{this.firstname}}</P>
-  <p>{{this.lastname}}</p>
-  <p>{{this.email}}</p>
+  <P>FirstName:{{this.firstname}}</P>
+  <p>LastName: {{this.lastname}}</p>
+  <p>Email Address: {{this.email}}</p>
+  <p>Subject: {{this.subject}}</p>
+  <p>Message: {{this.message}}</p>
   {{!-- <a href="/movies/edit/{{this._id}}">Edit</a>
   <form action="/movies/delete/{{this._id}}" method="post">
     <input type="submit" value="Delete"> 
