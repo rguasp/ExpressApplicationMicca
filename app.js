@@ -7,12 +7,22 @@ const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var nodemailer = require('nodemailer');
+var mailerAddress = "mirafusiontestform@gmail.com";
+var mailerPassword = "Password1234!";
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+         user: mailerAddress,
+         pass: mailerPassword
+     }
+ });
 
 var app = express();
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/TestDB', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/TestDB', {useNewUrlParser: true});
 const Schema = mongoose.Schema;
 
 app.use(bodyParser.urlencoded({ extended: false }));
