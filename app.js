@@ -47,7 +47,7 @@ app.get('/contactForm/9320', function (req, res) {
       // console.log(movies[0].title);
       let data = {};
       data.theList = contactForm;
-      console.log(data.theList);
+      //console.log(data.theList);
       res.render('contactFormData', data)
   })
   .catch(theError => {console.log(theError)})
@@ -69,7 +69,12 @@ app.post('/contactForm', function (req, res) {
    const theActualMessage = req.body.message
 
 
-
+   const mailOptions = {
+    from: mailerAddress, // sender address
+    to: mailerAddress, // list of receivers
+    subject: 'Message From:' + theActualFirstName +" "+ theActualLastName + " "+ theActualEmail, // Subject line
+    html: theActualMessage// plain text body
+  };
   const newContactform = new Contactform({
     firstname :theActualFirstName,
     lastname :theActualLastName,
@@ -77,15 +82,13 @@ app.post('/contactForm', function (req, res) {
     subject: theActualSubject,
     message: theActualMessage,
   })
-
   newContactform.save()
-  .then(contactForm => {
-    //console.log(movie);
-  })
-  .catch(theError => { 
-    console.log(theError)
-  })
-
+  transporter.sendMail(mailOptions, function (err, info) {
+    if(err)
+      console.log(err)
+    else
+      console.log(info);
+ });
   res.redirect('/')
 })
 
@@ -104,7 +107,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
