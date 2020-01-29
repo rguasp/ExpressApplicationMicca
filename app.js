@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var contactForm = require('./routes/contactForm');
 const session       = require("express-session");
-var nodemailer = require('nodemailer');
 const flash         = require("connect-flash");
 const favicon      = require('serve-favicon');
 
@@ -50,12 +49,19 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
 
+app.use(session({
+  secret: "our-passport-local-strategy-app",
+  resave: true,
+  saveUninitialized: true
+}));
 
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
+app.use(flash());
 
 app.use('/', indexRouter);
 app.use('/', contactForm);
