@@ -10,13 +10,13 @@ var indexRouter = require('./routes/index');
 var contactForm = require('./routes/contactForm');
 var nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-         user: mailerAddress,
-         pass: mailerPassword
-     }
- });
+// var transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//          user: mailerAddress,
+//          pass: mailerPassword
+//      }
+//  });
 var app = express();
 const mongoose = require('mongoose');
 
