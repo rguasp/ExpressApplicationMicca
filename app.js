@@ -50,16 +50,12 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
 
-app.use(session({
-  secret: "our-passport-local-strategy-app",
-  resave: true,
-  saveUninitialized: true
-}));
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+
 
 app.use('/', indexRouter);
 app.use('/', contactForm);
