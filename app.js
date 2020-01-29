@@ -11,6 +11,7 @@ var contactForm = require('./routes/contactForm');
 const session       = require("express-session");
 const flash         = require("connect-flash");
 const favicon      = require('serve-favicon');
+const passport      = require("passport");
 
 var app = express();
 const mongoose = require('mongoose');
@@ -80,5 +81,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 module.exports = router;
