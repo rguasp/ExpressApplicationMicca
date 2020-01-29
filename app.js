@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 
 var createError = require('http-errors');
 var express = require('express');
@@ -8,8 +8,10 @@ var logger = require('morgan');
 const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var contactForm = require('./routes/contactForm');
+const session       = require("express-session");
 var nodemailer = require('nodemailer');
-
+const flash         = require("connect-flash");
+const favicon      = require('serve-favicon');
 
 var app = express();
 const mongoose = require('mongoose');
