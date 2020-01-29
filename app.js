@@ -1,15 +1,15 @@
+
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
-
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var contactForm = require('./routes/contactForm');
 var nodemailer = require('nodemailer');
-var mailerAddress = "mirafusiontestform@gmail.com";
-var mailerPassword = "Password1234!";
+
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -17,80 +17,27 @@ var transporter = nodemailer.createTransport({
          pass: mailerPassword
      }
  });
-
 var app = express();
-
-
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/TestDB', {useNewUrlParser: true});
-const Schema = mongoose.Schema;
 
+// 'mongodb://localhost:27017/TestDB'
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 
+// app.get('/contactForm/9320', function (req, res) {
+//   // .find()
+//   Contactform.find()
+//     .then(contactForm => { 
+//       // console.log(contactForm[0]);
+//       let data = {};
+//       data.theList = contactForm;
+//       //console.log(data.theList);
+//       res.render('contactFormData', data)
+//   })
+//   .catch(theError => {console.log(theError)})
+// })
 
-const contactformsSchema = new Schema ({
-firstname: String,
-lastname: String,
-email: String,
-subject: String,
-message: String,
-})
-
-const Contactform = mongoose.model('Contactform', contactformsSchema)
-
-app.get('/contactForm/9320', function (req, res) {
-  // Movie.find()
-  Contactform.find()
-    .then(contactForm => { 
-      // console.log(contactForm[0]);
-      // console.log(movies[0].title);
-      let data = {};
-      data.theList = contactForm;
-      //console.log(data.theList);
-      res.render('contactFormData', data)
-  })
-  .catch(theError => {console.log(theError)})
-})
-
-// Get request after movie creation
-app.get('/contactForm', function (req, res) {
-  res.render('contactForm')
-})
-
-// // Submitted contact form
-app.post('/contactForm', function (req, res) {
-  //  console.log("req body", req.body);
-
-   const theActualFirstName = req.body.firstname;
-   const theActualLastName = req.body.lastname
-   const theActualEmail = req.body.email
-   const theActualSubject = req.body.subject
-   const theActualMessage = req.body.message
-
-
-   const mailOptions = {
-    from: mailerAddress, // sender address
-    to: mailerAddress, // list of receivers
-    subject: 'Message From:' + theActualFirstName +" "+ theActualLastName + " "+ theActualEmail, // Subject line
-    html: theActualMessage// plain text body
-  };
-  const newContactform = new Contactform({
-    firstname :theActualFirstName,
-    lastname :theActualLastName,
-    email : theActualEmail,
-    subject: theActualSubject,
-    message: theActualMessage,
-  })
-  newContactform.save()
-  transporter.sendMail(mailOptions, function (err, info) {
-    if(err)
-      console.log(err)
-    else
-      console.log(info);
- });
-  res.redirect('/')
-})
 
 
 // view engine setup
@@ -107,18 +54,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/', contactForm);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render('error');
