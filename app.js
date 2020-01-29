@@ -12,7 +12,7 @@ const session       = require("express-session");
 const flash         = require("connect-flash");
 const favicon      = require('serve-favicon');
 
-var app = express();
+var app = express.Router();
 const mongoose = require('mongoose');
 
 // 'mongodb://localhost:27017/TestDB'
